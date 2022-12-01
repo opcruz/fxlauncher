@@ -2,27 +2,38 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>no.tornado</groupId>
+    <groupId>org.colhome</groupId>
     <artifactId>fxlauncher</artifactId>
-    <version>1.0.22-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
+    
     <packaging>jar</packaging>
     <name>FX Launcher</name>
-    <description>Auto updating launcher for JavaFX Applications</description>
-    <url>https://github.com/edvin/fxlauncher</url>
+    <description>Fork of Auto updating launcher for JavaFX Applications from https://github.com/edvin/fxlauncher</description>
+    <url>https://github.com/chrisolivier/fxlauncher</url>
 
     <distributionManagement>
-        <repository>
+        <!-- repository>
             <id>sonatype-nexus-staging</id>
             <name>Nexus Release Repository</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
+        </repository -->
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<url>http://nexus.colhome.org:8081/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>nexus-releases</id>
+			<url>http://nexus.colhome.org:8081/nexus/content/repositories/releases/</url>
+		</repository>
+
     </distributionManagement>
 
     <organization>
-        <name>SYSE</name>
-        <url>https://www.syse.no/</url>
+        <name>COLHOME</name>
+        <url>https://github.com/chrisolivier</url>
     </organization>
 
     <licenses>
@@ -39,21 +50,74 @@
             <organization>SYSE AS</organization>
             <organizationUrl>https://www.syse.no</organizationUrl>
         </developer>
+         <developer>
+            <name>Christophe Olivier</name>
+            <email>christophe.olivier@colhome.fr</email>
+            <organization>COLHOME</organization>
+            <organizationUrl>https://github.com/chrisolivier</organizationUrl>
+        </developer>       
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:edvin/fxlauncher.git</connection>
-        <developerConnection>scm:git:git@github.com:edvin/fxlauncher.git</developerConnection>
-        <url>git@github.com:edvin/fxlauncher.git</url>
+        <connection>scm:git:git@github.com:chrisolivier/fxlauncher.git</connection>
+        <developerConnection>scm:git:git@github.com:chrisolivier/fxlauncher.git</developerConnection>
+        <url>git@github.com:chrisolivier/fxlauncher.git</url>
     </scm>
-
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <auto-service.version>1.0.1</auto-service.version>
+        <openjfx.version>18</openjfx.version>
+    </properties>
+    
+    <dependencies>
+    	<!-- apps which use fxlauncher should provide those 3 dependencies -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>${openjfx.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>${openjfx.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.openjfx</groupId>
+		    <artifactId>javafx-web</artifactId>
+		    <version>${openjfx.version}</version>
+		    <scope>provided</scope>
+		</dependency>
+		<!-- ############################################################# -->
+		
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>4.0.1</version>
+            <scope>runtime</scope>
+        </dependency>
+		<dependency>
+			<groupId>com.google.auto.service</groupId>
+			<artifactId>auto-service-annotations</artifactId>
+			<version>${auto-service.version}</version>
+		</dependency>          
+    </dependencies>
     <build>
         <pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>2.1</version>
+                    <version>3.0.0-M7</version>
                     <configuration>
                         <mavenExecutorId>forked-path</mavenExecutorId>
                         <useReleaseProfile>false</useReleaseProfile>
@@ -63,31 +127,63 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+				    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>com.google.auto.service</groupId>
+							<artifactId>auto-service</artifactId>
+							<version>${auto-service.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/libs</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+							<includeScope>compile</includeScope>
+							<includeScope>runtime</includeScope>
+							<stripVersion>true</stripVersion>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.0.2</version>
                 <configuration>
+                	<outputDirectory>${project.build.directory}/libs</outputDirectory>
                     <archive>
                         <manifest>
-                            <mainClass>fxlauncher.Launcher</mainClass>
+                            <mainClass>fxlauncher.Start</mainClass>
                         </manifest>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
+                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -95,13 +191,18 @@
                             <goal>javadoc</goal>
                             <goal>jar</goal>
                         </goals>
+	                    <configuration>
+	                    	<includeDependencySources>false</includeDependencySources>
+							<includeTransitiveDependencySources>false</includeTransitiveDependencySources>
+							<failOnError>false</failOnError>
+	                    </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -115,11 +216,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.4</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
-                        <phase>deploy</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>sign</goal>
                         </goals>
@@ -128,11 +229,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 
 </project>

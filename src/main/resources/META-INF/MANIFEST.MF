@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Created-By: Apache Maven 3.6.3
+Built-By: christophe
+Build-Jdk: 17.0.5
+Class-Path: javafx-controls.jar javafx-controls-linux.jar javafx-graphic
+ s.jar javafx-graphics-linux.jar javafx-base.jar javafx-base-linux.jar j
+ avafx-fxml.jar javafx-fxml-linux.jar javafx-web.jar javafx-web-linux.ja
+ r javafx-media.jar javafx-media-linux.jar jakarta.xml.bind-api.jar jaka
+ rta.activation-api.jar jaxb-impl.jar jaxb-core.jar angus-activation.jar
+  javafx-controls-win.jar javafx-graphics-win.jar javafx-base-win.jar ja
+ vafx-fxml-win.jar javafx-web-win.jar javafx-media-win.jar javafx-contro
+ ls-mac.jar javafx-graphics-mac.jar javafx-base-mac.jar javafx-fxml-mac.
+ jar javafx-web-mac.jar javafx-media-mac.jar
+Main-Class: fxlauncher.Start

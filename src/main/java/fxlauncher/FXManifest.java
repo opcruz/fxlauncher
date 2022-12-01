@@ -1,9 +1,7 @@
 package fxlauncher;
 
-import javax.xml.bind.JAXB;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import static fxlauncher.Strings.ensureEndingSlash;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,9 +11,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-import static fxlauncher.Strings.ensureEndingSlash;
+import jakarta.xml.bind.JAXB;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 
 @XmlRootElement(name = "Application")

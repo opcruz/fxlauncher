@@ -1,5 +1,7 @@
 package fxlauncher;
 
+import com.google.auto.service.AutoService;
+
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -9,6 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+@AutoService(UIProvider.class)
 public class DefaultUIProvider implements UIProvider {
 	private ProgressBar progressBar;
 

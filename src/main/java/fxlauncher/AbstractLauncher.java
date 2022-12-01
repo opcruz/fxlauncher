@@ -1,9 +1,7 @@
 package fxlauncher;
 
-import javafx.application.Application;
+import static fxlauncher.Strings.ensureEndingSlash;
 
-import javax.net.ssl.*;
-import javax.xml.bind.JAXB;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +26,14 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 
-import static fxlauncher.Strings.ensureEndingSlash;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import jakarta.xml.bind.JAXB;
+import javafx.application.Application;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractLauncher<APP> {

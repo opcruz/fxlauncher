@@ -11,7 +11,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.javafx.application.PlatformImpl;
+//import com.sun.javafx.application.PlatformImpl;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -247,7 +247,11 @@ public class Launcher extends Application {
 				appparams.getRaw().addAll(params.getRaw());
 				appparams.getUnnamed().addAll(params.getUnnamed());
 			}
-			PlatformImpl.setApplicationName(app.getClass());
+			
+			// [COL] I don't know how to replace this line with openJfx
+//			PlatformImpl.setApplicationName(app.getClass());
+			
+			
 			superLauncher.setPhase(Constants.getString("Application.Phase.Init"));
 			app.start(primaryStage);
 		} else {

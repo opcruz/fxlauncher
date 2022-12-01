@@ -1,6 +1,5 @@
 package fxlauncher;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -10,6 +9,8 @@ import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.Adler32;
+
+import jakarta.xml.bind.annotation.XmlAttribute;
 
 public class LibraryFile {
     @XmlAttribute
