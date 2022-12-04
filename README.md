@@ -25,8 +25,8 @@ You can also let this scope as is and add those dependencies in the classpath op
 		</dependency>
 ```
 For integration purpose, you will have to provide those jar in your application in version less and let this scope uncommented before a mvn package or install.  
-Version less allow auto-update provided by FXLauncher and allow your apps to be compiled for linux, windows and mac.  
-  
+Version less allow auto-update provided by FXLauncher and allow your apps to be compiled for linux, windows and mac.
+It works fine for linux and windows, I still have some issue with mac-os. 
 
 # FXLauncher
 
