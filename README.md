@@ -1,32 +1,7 @@
 # Fork
 Upgrade to JDK 17 and OpenJFX 18, it should work for higher version. 
 
-For test purpose and to use this fork as described in the documentation bellow you will need to comment out the scope tag of the following dependencies before packaging.  
-You can also let this scope as is and add those dependencies in the classpath option of the command line, these dependencies have to be version less.
 
-```bash
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-controls</artifactId>
-			<version>${openjfx.version}</version>
-			<!-- scope>provided</scope -->
-		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-fxml</artifactId>
-			<version>${openjfx.version}</version>
-			<!-- scope>provided</scope -->
-		</dependency>
-		<dependency>
-		    <groupId>org.openjfx</groupId>
-		    <artifactId>javafx-web</artifactId>
-		    <version>${openjfx.version}</version>
-		    <!-- scope>provided</scope -->
-		</dependency>
-```
-For integration purpose, you will have to provide those jar in your application in version less and let this scope uncommented before a mvn package or install.  
-Version less allow auto-update provided by FXLauncher and allow your apps to be compiled for linux, windows and mac.
-It works fine for linux and windows, I still have some issue with mac-os. 
 
 # FXLauncher
 
