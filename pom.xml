@@ -7,7 +7,7 @@
 
     <groupId>org.colhome</groupId>
     <artifactId>fxlauncher</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     
     <packaging>jar</packaging>
     <name>FX Launcher</name>
@@ -106,12 +106,13 @@
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
             <version>4.0.1</version>
+            <scope>runtime</scope>
         </dependency>
 		<dependency>
 			<groupId>com.google.auto.service</groupId>
 			<artifactId>auto-service-annotations</artifactId>
 			<version>${auto-service.version}</version>
-			<scope>runtime</scope>
+			
 		</dependency>          
     </dependencies>
     <build>
