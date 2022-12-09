@@ -57,6 +57,7 @@
         <connection>scm:git:git@github.com:chrisolivier/fxlauncher.git</connection>
         <developerConnection>scm:git:git@github.com:chrisolivier/fxlauncher.git</developerConnection>
         <url>git@github.com:chrisolivier/fxlauncher.git</url>
+        <tag>HEAD</tag>
     </scm>
     
     <properties>
@@ -114,9 +115,7 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>3.0.0-M7</version>
                     <configuration>
-                        <mavenExecutorId>forked-path</mavenExecutorId>
-                        <useReleaseProfile>false</useReleaseProfile>
-                        <arguments>-Psonatype-oss-release</arguments>
+                        <tagNameFormat>v{project.version}</tagNameFormat>
                     </configuration>
                 </plugin>
             </plugins>
