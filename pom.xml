@@ -115,7 +115,7 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>3.0.0-M7</version>
                     <configuration>
-                        <tagNameFormat>v{project.version}</tagNameFormat>
+                        <tagNameFormat>${project.version}</tagNameFormat>
                     </configuration>
                 </plugin>
             </plugins>
