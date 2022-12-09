@@ -24,14 +24,6 @@
 	      <name>Central Repository OSSRH</name>
 	      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 	    </repository>
-		<!-- snapshotRepository>
-			<id>nexus-snapshots</id>
-			<url>http://nexus.colhome.org:8081/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-		<repository>
-			<id>nexus-releases</id>
-			<url>http://nexus.colhome.org:8081/nexus/content/repositories/releases/</url>
-		</repository -->
     </distributionManagement>
 
     <organization>
@@ -112,7 +104,6 @@
 			<groupId>com.google.auto.service</groupId>
 			<artifactId>auto-service-annotations</artifactId>
 			<version>${auto-service.version}</version>
-			
 		</dependency>          
     </dependencies>
     <build>
