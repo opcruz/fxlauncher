@@ -1,7 +1,7 @@
 # Fork
 Upgrade to JDK 17 and OpenJFX 18, it should work for higher version. 
 
-You can find a POC [here](https://github.com/chrisolivier/JPackageScriptFX/settings)
+You can find a POC [here](https://github.com/chrisolivier/JPackageScriptFX)
 
 
 # FXLauncher
