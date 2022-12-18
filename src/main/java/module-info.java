@@ -14,7 +14,7 @@ module fxlauncher {
 	
 	opens fxlauncher to jakarta.xml.bind;
 	
-	provides fxlauncher.UIProvider with fxlauncher.DefaultUIProvider;
+	// provides fxlauncher.UIProvider with fxlauncher.DefaultUIProvider;
 	
 	uses fxlauncher.UIProvider;
 }

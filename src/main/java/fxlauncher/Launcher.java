@@ -123,7 +123,13 @@ public class Launcher extends Application {
 	 */
 	public void init() throws Exception {
 		Iterator<UIProvider> providers = ServiceLoader.load(UIProvider.class).iterator();
-		uiProvider = providers.hasNext() ? providers.next() : new DefaultUIProvider();
+		providers.forEachRemaining((p) -> {
+			uiProvider = p;
+		});
+		
+		if(uiProvider == null) {
+			uiProvider = new DefaultUIProvider();
+		}
 	}
 
 	public void start(Stage primaryStage) throws Exception {
