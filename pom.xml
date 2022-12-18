@@ -5,7 +5,7 @@
 
     <groupId>org.colhome</groupId>
     <artifactId>fxlauncher</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     
     <packaging>jar</packaging>
     <name>FX Launcher</name>
@@ -55,7 +55,7 @@
         <connection>scm:git:git@github.com:chrisolivier/fxlauncher.git</connection>
         <developerConnection>scm:git:git@github.com:chrisolivier/fxlauncher.git</developerConnection>
         <url>git@github.com:chrisolivier/fxlauncher.git</url>
-        <tag>HEAD</tag>
+        <tag>1.0.1</tag>
     </scm>
     
     <properties>
