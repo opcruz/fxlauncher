@@ -3,14 +3,14 @@
          
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.colhome</groupId>
+    <groupId>com.opcruz</groupId>
     <artifactId>fxlauncher</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.1.0</version>
     
     <packaging>jar</packaging>
     <name>FX Launcher</name>
     <description>Fork of Auto updating launcher for JavaFX Applications from https://github.com/edvin/fxlauncher</description>
-    <url>https://github.com/chrisolivier/fxlauncher</url>
+    <url>https://github.com/opcruz/fxlauncher</url>
 
     <distributionManagement>
 		<snapshotRepository>
@@ -63,7 +63,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <auto-service.version>1.0.1</auto-service.version>
-        <openjfx.version>17.0.2</openjfx.version>
+        <openjfx.version>17.0.13</openjfx.version>
     </properties>
     
     <dependencies>
@@ -72,19 +72,19 @@
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
 			<version>${openjfx.version}</version>
-<!--			<scope>provided</scope>-->
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
 			<version>${openjfx.version}</version>
-<!--			<scope>provided</scope>-->
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 		    <groupId>org.openjfx</groupId>
 		    <artifactId>javafx-web</artifactId>
 		    <version>${openjfx.version}</version>
-<!--		    <scope>provided</scope>-->
+		    <scope>provided</scope>
 		</dependency>
 		<!-- ############################################################# -->
 		
@@ -205,20 +205,20 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-gpg-plugin</artifactId>-->
+<!--                <version>3.0.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>sign-artifacts</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>sign</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 

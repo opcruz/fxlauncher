@@ -6,106 +6,112 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
- * Implementation Application.Parameters that wraps the parameters given to the application
- * at startup, and adds any manifest configured parameters unless they were overriden
- * by the command line.
+ * Implementation Application.Parameters that wraps the parameters given to the application at
+ * startup, and adds any manifest configured parameters unless they were overriden by the command
+ * line.
  */
 public class LauncherParams extends Application.Parameters {
-    private final List<String> rawArgs = new ArrayList<>();
-    private final Map<String, String> namedParams = new HashMap<>();
-    private final List<String> unnamedParams = new ArrayList<>();
+  private final List<String> rawArgs = new ArrayList<>();
+  private final Map<String, String> namedParams = new HashMap<>();
+  private final List<String> unnamedParams = new ArrayList<>();
 
-    public LauncherParams(List<String> rawArgs) {
-        this.rawArgs.addAll(rawArgs);
-        computeParams();
-    }
+  public LauncherParams(List<String> rawArgs) {
+    this.rawArgs.addAll(rawArgs);
+    computeParams();
+  }
 
-    public LauncherParams(Application.Parameters delegate, FXManifest manifest) {
-        // Add all raw args from the parent application
-        rawArgs.addAll(delegate.getRaw());
+  public LauncherParams(Application.Parameters delegate, FXManifest manifest) {
+    // Add all raw args from the parent application
+    rawArgs.addAll(delegate.getRaw());
 
-        // Add parameters from the manifest unless they were already specified on the command line
-        if (manifest.parameters != null) {
-            for (String arg : manifest.parameters.split("\\s")) {
-                if (arg != null) {
-                    if (rawArgs.contains(arg))
-                        continue;
+    // Add parameters from the manifest unless they were already specified on the
+    // command line
+    if (manifest.parameters != null) {
+      for (String arg : manifest.parameters.split("\\s")) {
+        if (arg != null) {
 
-                    if (arg.startsWith("--") && arg.contains("=")) {
-                        String argname = arg.substring(0, arg.indexOf("="));
-                        if (rawArgs.stream().filter(a -> a.startsWith(argname)).findAny().isPresent())
-                            continue;
-                    }
+          if (rawArgs.contains(arg)) {
+            continue;
+          }
 
-                    rawArgs.add(arg);
-                }
+          if (arg.startsWith("--") && arg.contains("=")) {
+            String argname = arg.substring(0, arg.indexOf("="));
+            if (rawArgs.stream().anyMatch(a -> a.startsWith(argname))) {
+              continue;
             }
+          }
+
+          rawArgs.add(arg);
         }
-
-        computeParams();
+      }
     }
 
-    private void computeParams() {
-        // Compute named and unnamed parameters
-        computeNamedParams();
-        computeUnnamedParams();
-    }
+    computeParams();
+  }
 
-    public List<String> getRaw() {
-        return rawArgs;
-    }
+  private void computeParams() {
+    // Compute named and unnamed parameters
+    computeNamedParams();
+    computeUnnamedParams();
+  }
 
-    public List<String> getUnnamed() {
-        return unnamedParams;
-    }
+  public List<String> getRaw() {
+    return rawArgs;
+  }
 
-    public Map<String, String> getNamed() {
-        return namedParams;
-    }
+  public List<String> getUnnamed() {
+    return unnamedParams;
+  }
 
-    /**
-     * Returns true if the specified string is a named parameter of the
-     * form: --name=value
-     *
-     * @param arg the string to check
-     * @return true if the string matches the pattern for a named parameter.
-     */
-    private boolean isNamedParam(String arg) {
-        return arg.startsWith("--") && (arg.indexOf('=') > 2 && validFirstChar(arg.charAt(2)));
-    }
+  public Map<String, String> getNamed() {
+    return namedParams;
+  }
 
-    /**
-     * This method parses the current array of raw arguments looking for
-     * name,value pairs. These name,value pairs are then added to the map
-     * for this parameters object, and are of the form: --name=value.
-     */
-    private void computeNamedParams() {
-        rawArgs.stream().filter(this::isNamedParam).forEach(arg -> {
-            final int eqIdx = arg.indexOf('=');
-            String key = arg.substring(2, eqIdx);
-            String value = arg.substring(eqIdx + 1);
-            namedParams.put(key, value);
-        });
-    }
-    /**
-     * This method computes the list of unnamed parameters, by filtering the
-     * list of raw arguments, stripping out the named parameters.
-     */
-    private void computeUnnamedParams() {
-        unnamedParams.addAll(rawArgs.stream().filter(arg -> !isNamedParam(arg)).collect(Collectors.toList()));
-    }
+  /**
+   * Returns true if the specified string is a named parameter of the form: --name=value
+   *
+   * @param arg the string to check
+   * @return true if the string matches the pattern for a named parameter.
+   */
+  private boolean isNamedParam(String arg) {
+    return arg.startsWith("--") && (arg.indexOf('=') > 2 && validFirstChar(arg.charAt(2)));
+  }
 
-    /**
-     * Validate the first character of a key. It is valid if it is a letter or
-     * an "_" character.
-     *
-     * @param c the first char of a key string
-     * @return whether or not it is valid
-     */
-    private boolean validFirstChar(char c) {
-        return Character.isLetter(c) || c == '_';
-    }
+  /**
+   * This method parses the current array of raw arguments looking for name,value pairs. These
+   * name,value pairs are then added to the map for this parameters object, and are of the form:
+   * --name=value.
+   */
+  private void computeNamedParams() {
+    rawArgs.stream()
+        .filter(this::isNamedParam)
+        .forEach(
+            arg -> {
+              final int eqIdx = arg.indexOf('=');
+              String key = arg.substring(2, eqIdx);
+              String value = arg.substring(eqIdx + 1);
+              namedParams.put(key, value);
+            });
+  }
+
+  /**
+   * This method computes the list of unnamed parameters, by filtering the list of raw arguments,
+   * stripping out the named parameters.
+   */
+  private void computeUnnamedParams() {
+    unnamedParams.addAll(
+        rawArgs.stream().filter(arg -> !isNamedParam(arg)).toList());
+  }
+
+  /**
+   * Validate the first character of a key. It is valid if it is a letter or an "_" character.
+   *
+   * @param c the first char of a key string
+   * @return whether or not it is valid
+   */
+  private boolean validFirstChar(char c) {
+    return Character.isLetter(c) || c == '_';
+  }
 }
