@@ -1,16 +1,7 @@
 package fxlauncher;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URI;
-import java.nio.file.Path;
-import java.util.concurrent.CountDownLatch;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -20,10 +11,21 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class Launcher extends Application {
-  private static final Logger log = Logger.getLogger("Launcher");
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.PrintWriter;
+import java.lang.management.ManagementFactory;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-  private Application app;
+public class LauncherProcess extends Application {
+  private static final Logger log = Logger.getLogger("LauncherProcess");
+
   private Stage primaryStage;
   private Stage stage;
   private UIProvider uiProvider;
@@ -33,7 +35,7 @@ public class Launcher extends Application {
       new AbstractLauncher<>() {
         @Override
         protected Parameters getParameters() {
-          return Launcher.this.getParameters();
+          return LauncherProcess.this.getParameters();
         }
 
         @Override
@@ -42,23 +44,7 @@ public class Launcher extends Application {
         }
 
         @Override
-        protected void createApplication(Class<Application> appClass) {
-          runAndWait(
-              () -> {
-                try {
-                  if (Application.class.isAssignableFrom(appClass)) {
-                    Launcher.this.app = appClass.getDeclaredConstructor().newInstance();
-                  } else {
-                    throw new IllegalArgumentException(
-                        String.format(
-                            "Supplied appClass %s was not a subclass of javafx.application.Application!",
-                            appClass));
-                  }
-                } catch (Throwable t) {
-                  reportError("Error creating app class", t);
-                }
-              });
-        }
+        protected void createApplication(Class<Application> appClass) { }
 
         @Override
         protected void reportError(String title, Throwable error) {
@@ -87,40 +73,9 @@ public class Launcher extends Application {
         }
 
         @Override
-        protected void setupClassLoader(ClassLoader classLoader) {
-          FXMLLoader.setDefaultClassLoader(classLoader);
-          Platform.runLater(() -> Thread.currentThread().setContextClassLoader(classLoader));
-        }
+        protected void setupClassLoader(ClassLoader classLoader) { }
       };
 
-  /**
-   * Check if a new version is available and return the manifest for the new version or null if no
-   * update.
-   *
-   * <p>Note that updates will only be detected if the application was actually launched with
-   * FXLauncher.
-   *
-   * @return The manifest for the new version if available
-   * @throws IOException
-   */
-  public static FXManifest checkForUpdate() throws IOException {
-    // We might be called even when FXLauncher wasn't used to start the application
-    if (AbstractLauncher.manifest == null) {
-      return null;
-    }
-    FXManifest manifest = FXManifest.load(URI.create(AbstractLauncher.manifest.uri + "/app.xml"));
-    return manifest.equals(AbstractLauncher.manifest) ? null : manifest;
-  }
-
-  /**
-   * Initialize the UI Provider by looking for an UIProvider inside the launcher or fallback to the
-   * default UI.
-   *
-   * <p>A custom implementation must be embedded inside the launcher jar, and
-   * /META-INF/services/fxlauncher.UIProvider must point to the new implementation class.
-   *
-   * <p>You must do this manually/in your build right around the "embed manifest" step.
-   */
   public void init() {
     uiProvider = new DefaultUIProvider();
   }
@@ -131,7 +86,6 @@ public class Launcher extends Application {
 //    stage.initStyle(StageStyle.TRANSPARENT);
     root = new StackPane();
 //    root.setStyle("-fx-padding: 3px; -fx-background-color: transparent;");
-
     Scene scene = new Scene(root);
 //    scene.setFill(Color.TRANSPARENT);
     stage.setScene(scene);
@@ -164,7 +118,6 @@ public class Launcher extends Application {
               }
 
               try {
-                superLauncher.createApplicationEnvironment();
                 launchAppFromManifest(filesUpdated);
               } catch (Exception ex) {
                 superLauncher.reportError(
@@ -176,13 +129,6 @@ public class Launcher extends Application {
 
   private void launchAppFromManifest(boolean showWhatsnew) {
     superLauncher.setPhase("Application Environment Prepare");
-
-    try {
-      initApplication();
-    } catch (Throwable ex) {
-      superLauncher.reportError("Error during app init", ex);
-    }
-    superLauncher.setPhase("Application Start");
     log.info("Show whats new dialog? " + showWhatsnew);
 
     runAndWait(
@@ -204,6 +150,7 @@ public class Launcher extends Application {
             }
 
             startApplication();
+            Platform.exit();
           } catch (Throwable ex) {
             superLauncher.reportError("Failed to start application", ex);
           }
@@ -235,49 +182,37 @@ public class Launcher extends Application {
         });
   }
 
-  public void stop() throws Exception {
-    if (app != null) app.stop();
-  }
-
-  private void initApplication() throws Exception {
-    if (app != null) {
-      app.init();
-    }
-  }
-
   private void startApplication() throws Exception {
-    if (app != null) {
-      Parameters appparams = app.getParameters();
-      // check if app has parameters
-      if (appparams != null) {
-        final LauncherParams params = new LauncherParams(getParameters(), superLauncher.getManifest());
-        appparams.getNamed().putAll(params.getNamed());
-        appparams.getRaw().addAll(params.getRaw());
-        appparams.getUnnamed().addAll(params.getUnnamed());
-      }
+    FXManifest manifest = superLauncher.getManifest();
+    Path cacheDir = manifest.resolveCacheDir(getParameters().getNamed());
 
-      // [COL] I don't know how to replace this line with openJfx
-//			PlatformImpl.setApplicationName(app.getClass());
-      superLauncher.setPhase("Application Init");
-      app.start(primaryStage);
-    } else {
-      // Start any executable jar (i.E. Spring Boot);
-      String firstFile = superLauncher.getManifest().files.getFirst().file;
-      log.info(String.format("No app class defined, starting first file (%s)", firstFile));
-      Path cacheDir = superLauncher.getManifest().resolveCacheDir(getParameters().getNamed());
-      String command = String.format("java -jar %s/%s", cacheDir.toAbsolutePath(), firstFile);
-      log.info(String.format("Execute command '%s'", command));
-      Runtime.getRuntime().exec(command.split(" "));
+    String javaBin = System.getProperty("java.home")
+            + File.separator + "bin" + File.separator + "java";
+
+    String classPath = manifest.files.stream()
+            .map(value -> cacheDir.resolve(value.file).toAbsolutePath().toString())
+            .filter(value -> value.endsWith(".jar"))
+            .collect(Collectors.joining(File.pathSeparator));
+
+    if (classPath.isEmpty()) {
+      throw new IllegalStateException("No JAR files found for classpath.");
     }
+    if (manifest.launchClass == null) {
+      throw new IllegalStateException("Main class not defined in manifest.");
+    }
+
+    List<String> command = new ArrayList<>();
+    command.add(javaBin);
+    command.addAll(ManagementFactory.getRuntimeMXBean().getInputArguments());
+    command.add("-cp");
+    command.add(classPath);
+    command.add(manifest.launchClass);
+    command.addAll(getParameters().getUnnamed());
+
+    new ProcessBuilder(command).start();
   }
 
-  /**
-   * Runs the specified {@link Runnable} on the JavaFX application thread and waits for completion.
-   *
-   * @param action the {@link Runnable} to run
-   * @throws NullPointerException if {@code action} is {@code null}
-   */
-  void runAndWait(Runnable action) {
+  private void runAndWait(Runnable action) {
     if (action == null) throw new NullPointerException("action");
 
     // run synchronously on JavaFX thread

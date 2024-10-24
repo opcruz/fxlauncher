@@ -3,14 +3,14 @@
          
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.colhome</groupId>
+    <groupId>com.opcruz</groupId>
     <artifactId>fxlauncher</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.1.0</version>
     
     <packaging>jar</packaging>
     <name>FX Launcher</name>
     <description>Fork of Auto updating launcher for JavaFX Applications from https://github.com/edvin/fxlauncher</description>
-    <url>https://github.com/chrisolivier/fxlauncher</url>
+    <url>https://github.com/opcruz/fxlauncher</url>
 
     <distributionManagement>
 		<snapshotRepository>
@@ -60,10 +60,10 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <auto-service.version>1.0.1</auto-service.version>
-        <openjfx.version>17.0.2</openjfx.version>
+        <openjfx.version>21.0.8</openjfx.version>
     </properties>
     
     <dependencies>
@@ -72,19 +72,19 @@
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
 			<version>${openjfx.version}</version>
-<!--			<scope>provided</scope>-->
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
 			<version>${openjfx.version}</version>
-<!--			<scope>provided</scope>-->
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 		    <groupId>org.openjfx</groupId>
 		    <artifactId>javafx-web</artifactId>
 		    <version>${openjfx.version}</version>
-<!--		    <scope>provided</scope>-->
+		    <scope>provided</scope>
 		</dependency>
 		<!-- ############################################################# -->
 		
@@ -99,11 +99,6 @@
             <version>4.0.1</version>
             <scope>runtime</scope>
         </dependency>
-		<dependency>
-			<groupId>com.google.auto.service</groupId>
-			<artifactId>auto-service-annotations</artifactId>
-			<version>${auto-service.version}</version>
-		</dependency>          
     </dependencies>
     <build>
         <pluginManagement>
@@ -119,6 +114,7 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <!--
 		<plugin>
 			<groupId>org.sonatype.plugins</groupId>
 			<artifactId>nexus-staging-maven-plugin</artifactId>
@@ -130,6 +126,7 @@
 				<autoReleaseAfterClose>false</autoReleaseAfterClose>
 			</configuration>
 		</plugin>
+		-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -146,29 +143,29 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.3.0</version>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/libs</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
-							<includeScope>compile</includeScope>
-							<includeScope>runtime</includeScope>
-							<stripVersion>true</stripVersion>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-dependency-plugin</artifactId>-->
+<!--				<version>3.3.0</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>copy-dependencies</id>-->
+<!--						<phase>package</phase>-->
+<!--						<goals>-->
+<!--							<goal>copy-dependencies</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<outputDirectory>${project.build.directory}/libs</outputDirectory>-->
+<!--							<overWriteReleases>false</overWriteReleases>-->
+<!--							<overWriteSnapshots>true</overWriteSnapshots>-->
+<!--							<overWriteIfNewer>true</overWriteIfNewer>-->
+<!--							<includeScope>compile</includeScope>-->
+<!--							<includeScope>runtime</includeScope>-->
+<!--							<stripVersion>true</stripVersion>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 <!--            <plugin>-->
 <!--                <groupId>org.apache.maven.plugins</groupId>-->
 <!--                <artifactId>maven-jar-plugin</artifactId>-->
@@ -198,27 +195,27 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>fxlauncher.Start</mainClass>
+                                    <mainClass>fxlauncher.Launcher</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.0.1</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-gpg-plugin</artifactId>-->
+<!--                <version>3.0.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>sign-artifacts</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>sign</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 
