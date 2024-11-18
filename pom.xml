@@ -60,10 +60,10 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <auto-service.version>1.0.1</auto-service.version>
-        <openjfx.version>17.0.13</openjfx.version>
+        <openjfx.version>21.0.5</openjfx.version>
     </properties>
     
     <dependencies>
